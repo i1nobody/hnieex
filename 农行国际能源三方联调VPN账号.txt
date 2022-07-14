@@ -1,0 +1,7 @@
+地址：https://47.106.218.233
+账号：gjnyfz
+密码：Wisdom@hnsh@123
+
+centos版本easy Connect安装方式：官方提供的有rpm安装包，直接rpm -ivh xxx
+安装完成后，在/usr/share/applications目录下，找到easy Connect，将其拷贝到桌面，然后点击Trust and Launch（信任与启动），图标就显示出来了，可以通过鼠标启动了。
+下次即可双击桌面快捷方式直接打开

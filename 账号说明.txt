@@ -1,0 +1,60 @@
+Hnieex国际版-01  172.16.10.17  Oracle备份：
+	备份脚本：/home/scripts/oracle_backup.sh，备份后文件位于172.16.10.27 /backup/    （nginx配置也位于这里）
+	脚本内容
+	#!/bin/bash
+	day7=`date  -d "-7 day" +%Y%m%d`
+	daynow=`date +%Y%m%d%H%M%S`
+	su - oracle -c "exp app/d0Eb1c9Ba2378f20E5f18152bC file=/backup/oracle/app_backup_data_`date +%Y%m%d%H%M%S` 	log=/backup/oracle/app_backup_log_`date +%Y%m%d%H%M%S`"
+	#su oracle -c "exp sys/c36F10Fd0ff59C3bcce088 file=/backup/oracle/sys_backup_data_`date +%Y%m%d%H%M%S` 	log=/backup/oracle/sys_backup_log_`date +%Y%m%d%H%M%S` full=y"
+	rm -rf /backup/oracle/*_backup_*_${day7}*
+	rsync -aroz --delete /backup/* prod_hnieex_02:/backup/
+    172.16.10.27 prod_hnieex_02
+
+
+Hnieex国际版-01  172.16.10.17 nginx备份：
+	备份脚本：/home/scripts/nginx_backup.sh
+	#!/bin/bash
+	day7=`date  -d "-7 day" +%Y%m%d`
+	daynow=`date +%Y%m%d%H%M%S`
+	test -d /backup/nginx/ ||mkdir /backup/nginx -p
+	cp -a /etc/nginx /backup/nginx/nginx_conf${daynow}
+	cp -a /usr/share/nginx /backup/nginx/nginx_data${daynow}
+	rm -rf /backup/nginx/nginx_*${day7}*
+	rsync -aroz --delete /backup/* prod_hnieex_02:/backup/
+    172.16.10.27 prod_hnieex_02
+
+
+SVN 192.168.0.15 备份，备份后文件位于192.168.0.100  /backup/192.168.0.100/
+	#!/bin/bash
+	day7=`date  -d "-2 day" +%Y%m%d`
+	daynow=`date +%Y%m%d%H%M%S`
+	svnadmin hotcopy /home/svn/repo /backup/svn/svn_${daynow}
+	rm -rf /backup/svn/svn_${day7}*
+	rsync -raz --delete /backup/svn root@192.168.0.100:/backup/192.168.0.100/
+
+
+网上交易服务器1  172.16.10.20 tengine备份：
+	暂无
+
+172.16.10.22  tengine离岸贸易
+
+生产离岸贸易1Oracle 172.16.10.43备份：
+	暂无
+
+
+生产离岸贸易2Oracle 172.16.10.44备份：
+	暂无
+
+
+
+
+
+
+开发测试环境
+
+国内版Oracle开发环境
+
+
+模拟Oracle-离岸贸易
+
+

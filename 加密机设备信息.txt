@@ -1,0 +1,50 @@
+Webui密码：191119#XA@sc!
+F增2柜-19u
+NetSign
+对应交换机port14
+网络：
+	GW：172.16.10.254
+	port1（eth3）172.16.10.120
+WebUi登陆方式：https://172.16.10.120:8443
+Webui用户名/密码：sys/191119#XA@sc!
+设备信息：
+	设备型号   NetSignServer3500-1103EAB-XASB200A 
+	产品编号   2029M3775 
+	服务器名   NetSignServer 
+	软件版本   NetSignServer5.5.40.16 签名服务器版本 : NetSignServer5.5.40.16  
+	许可证有效期   2021-03-03 23:54:37 ~ 2021-06-03 23:54:37 
+
+服务配置：
+	server  *	50010 	普通服务
+	证书DN：C=Cn,O=infosectest019
+	证书用途：签名&加密
+	根证书：C=cn,O=INFOSEC Technologies SM2ID,CN=appSM2ID
+
+
+
+NSAE
+F增2柜-19u
+	
+设备信息：
+	InfosecOS Rel.NSAE.10.3.1.20 build on Thu Nov 26 21:25:55 2020
+	
+	        Host name : NSAE
+	       System CPU : Intel(R) Xeon(R) CPU
+	       System RAM : 16151356 kbytes.
+	 System boot time : Mon Mar 08 11:51:46 GMT (+0000) 2021
+	     Current time : Mon Mar 08 12:12:38 GMT (+0000) 2021
+	   System up time : 21 mins, 22 secs
+	Platform Bld Date : Thu Mar 04 14:00:26 GMT 2021
+	           SSL HW : No HW Available
+	   Compression HW : No HW Available
+	     Power supply : 1U, 450W, P1(AC), P2(AC),
+	Network Interface : 4 x Gigabit Ethernet copper
+	            Model : INFOSEC NSAE 1800
+	    Serial Number : I72081093900405301755366160064
+	Licensed Features : WebWall  Clustering  L4SLB  L7SLB  SSL 
+			    SwCompression  MultiLang  IPv6  SWMaintenance 
+	      License Key : 9dbff1b7-73fa9ba5-09546ef7-dce4cb7c-81e28f59-8f447d33-1b0db131-94a0047f-0420210602
+
+网络信息：172.16.10.121/24/gw172.16.10.254
+WebUi登陆方式：https://172.16.10.121:8888
+Webui用户名/密码：admin/admin

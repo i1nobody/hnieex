@@ -1,0 +1,218 @@
+proxy_set_header HOST $host;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+client_max_body_size 30m;
+client_body_buffer_size 10m;
+proxy_connect_timeout 90;
+proxy_read_timeout 90;
+proxy_buffer_size 10m;
+proxy_buffers 4 10m;
+proxy_busy_buffers_size 10m;
+proxy_temp_file_write_size 10m;
+send_timeout 60s;
+
+#ws 
+proxy_http_version 1.1;
+proxy_set_header Upgrade $http_upgrade;
+proxy_set_header Connection "upgrade";
+
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    '' close;
+}
+server_tokens off;
+
+server {
+	server_name www.aolens.cn chanzhi.aolens.cn aolens.cn;
+	listen 80;
+	location /basic_status {
+		stub_status on;
+		access_log off;
+		allow 192.168.0.20;
+		#deny all;	
+	}
+	location / {
+		proxy_pass http://aolens;
+	}	
+}
+server {
+	server_name static.dev.hiee.com static.dev.hnieex.com 192.168.0.15;
+	listen	    80;
+	limit_rate_after 5m;
+	limit_rate	512k;
+	location ~ \.flv$ {
+		root /home/nginx/static;
+		flv;
+	}
+	location / {
+		root /home/nginx/static ;
+		index index.html;	
+	}
+}
+
+server {
+        listen  80;
+        server_name global.dev.hnieex.com global.dev.hiee.com;
+        location  /ws {
+                proxy_pass http://biz-hnieex-web2$1;
+        }
+        location  /exchange {
+                proxy_pass http://biz-hnieex-web/exchange;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection "Upgrade";
+        }
+
+        location / {
+                proxy_pass http://biz-hnieex-web/exchange;
+
+        }
+
+}
+server {
+        listen 80;
+        server_name oss.dev.hnieex.com oss.dev.hiee.com;
+        location / {
+                proxy_pass http://biz-oss-back-web;
+        }
+}
+
+server {
+        listen 80;
+        server_name wiki.dev.hnieex.com wiki.dev.hiee.com;
+        location / {
+                proxy_pass http://192.168.0.20:8090;
+        }
+}
+server {
+        listen 80;
+        server_name livebos.test.hnieex.com livebos.test.hiee.com;
+        location / {
+                proxy_pass http://test-livebos;
+        }
+}
+server {
+        listen 80;
+        server_name livebos.dev.hnieex.com livebos.dev.hiee.com;
+        location / {
+                proxy_pass http://dev-livebos;
+        }
+}
+
+
+server {
+        server_name static.test.hnieex.com static.test.hiee.com;
+        listen      80;
+	location ~ \.mp4 {
+		mp4;
+	}
+        location / {
+                root /home/nginx/static;
+                index index.html;
+        }
+}
+
+
+server {
+        listen 80;
+        server_name www.test.hiee.com www.test.hnieex.com 192.168.0.32; 
+        add_header 'Access-Control-Allow-Origin'  '*';
+        add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range';
+        add_header Access-Control-Allow-Methods *;
+        #add_header Access-Control-Allow-Methods GET,POST,PUT,DELETE,PATCH,OPTIONS;
+        location ^~ /trade {
+                proxy_pass http://test-biz-trade-web;
+        }
+        location ^~ /vessel {
+                proxy_pass http://192.168.0.32:8517;
+        }
+	location ^~ /finance {
+		proxy_pass http://172.16.10.42;
+	}
+        location ^~ /yimei {
+                proxy_pass http://192.168.0.32:8515;
+        }
+        location ^~ /CASServer {
+                proxy_pass http://192.168.0.32:8210;
+        }
+        location ^~ /editorUpload {
+                proxy_pass http://192.168.0.32:8210;
+        }
+        location ^~ /hngjny_pay {
+                proxy_pass http://192.168.0.32:8210;
+        }
+        location ^~ /jhjj {
+                proxy_pass http://192.168.0.32:8210;
+        }
+        location ^~ /oss {
+                proxy_pass http://test-biz-oss-web;
+        }
+
+        location ^~ /khzzgp {
+                proxy_pass http://192.168.0.32:8210;
+        }
+        location ^~ /web_actuals {
+                proxy_pass http://192.168.0.32:8210;
+        }
+	location ^~ /qianzheng {
+		proxy_pass http://172.16.10.99;	
+	}
+	location / {
+		proxy_pass http://192.168.0.33:9011;
+	}
+
+}
+
+
+
+
+server {
+	listen 80;
+	server_name www.dev.hiee.com www.dev.hnieex.com 114.141.181.6;
+	add_header 'Access-Control-Allow-Origin'  '*';
+        add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range';
+	add_header Access-Control-Allow-Methods *;
+	#add_header Access-Control-Allow-Methods GET,POST,PUT,DELETE,PATCH,OPTIONS;
+	if ( $host = 'www.dev.hnieex.com' ) {
+		rewrite ^(.*)$ http://www.dev.hiee.com$1 permanent;
+	}
+	location ^~ /trade {
+                proxy_pass http://biz-trade-web;
+        }
+	location ^~ /exchgate {
+                proxy_pass http://biz-exchgate-web;
+        }
+        location ^~ /qianzheng {
+                proxy_pass http://172.16.10.99/;
+		proxy_redirect http://172.16.10.99 http://www.dev.hnieex.com/qianzheng;
+		#proxy_redirect http://host http://$host:$server_port;
+        }
+
+	location ^~ /vessel {
+                proxy_pass http://biz-tender-web;
+		#ssl_buffer_size 4k;
+        }
+        location ^~ /oss {
+                proxy_pass http://biz-oss-web;
+        }
+
+	location ^~ /yimei {
+                proxy_pass http://yimei;
+        }
+	location ^~ /scfa {
+                proxy_pass http://biz-scfa-web;
+        }
+	location ^~ /hngjny_pay/zsyh/pft/recive {
+		proxy_pass http://192.168.0.19:8210;
+	}
+	#192.168.0.18网站服务器
+	location / {
+		proxy_pass http://192.168.0.18:9011;
+	}
+	
+		
+}
+
+
+
+
